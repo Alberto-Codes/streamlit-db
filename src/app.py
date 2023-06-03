@@ -30,6 +30,17 @@ selected = option_menu(
 years = [datetime.today().year, datetime.today().year + 1]
 months = list(calendar.month_name[1:])
 
+# --- HIDE STREAMLIT STYLE ---
+hide_st_style = """
+                <style>
+                #MainMenu {visibility: hidden;}
+                footer {visibility: hidden;}
+                header {visibility: hidden;}
+                </sytle>
+                """
+
+st.markdown(hide_st_style, unsafe_allow_html=True)
+
 
 # -------------- INPUT & SAVE PERIODS -----------------------------
 if selected == "Data Entry":
