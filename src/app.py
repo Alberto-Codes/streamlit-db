@@ -1,12 +1,8 @@
 import calendar
 from datetime import datetime
 
-import debugpy
 import plotly.graph_objects as go
 import streamlit as st
-
-debugpy.listen(("localhost", 5678))
-
 
 # ---------SETTINGS--------------
 income = ["Salary", "Blog", "Other Income"]
