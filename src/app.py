@@ -21,7 +21,7 @@ st.title(page_title + " " + page_icon)
 selected = option_menu(
     menu_title=None,
     options=["Data Entry", "Data Visualization"],
-    icons = ["pencil-fill", "bar-chart-fill"],
+    icons=["pencil-fill", "bar-chart-fill"],
     orientation="horizontal",
 )
 
@@ -53,7 +53,9 @@ if selected == "Data Entry":
         "---"
         with st.expander("Income"):
             for income in incomes:
-                st.number_input(f"{income}:", min_value=0, format="%i", step=10, key=income)
+                st.number_input(
+                    f"{income}:", min_value=0, format="%i", step=10, key=income
+                )
         with st.expander("Expenses"):
             for expense in expenses:
                 st.number_input(
@@ -65,7 +67,9 @@ if selected == "Data Entry":
         "---"
         submitted = st.form_submit_button("Save Data")
         if submitted:
-            period = str(st.session_state["year"]) + "_" + str(st.session_state["month"])
+            period = (
+                str(st.session_state["year"]) + "_" + str(st.session_state["month"])
+            )
             incomes = {income: st.session_state[income] for income in incomes}
             expenses = {expense: st.session_state[expense] for expense in expenses}
             # TODO Insert values into database
