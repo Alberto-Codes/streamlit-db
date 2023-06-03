@@ -1,0 +1,10 @@
+{
+    "name": "Streamlit",
+    "image": "python:3.10",
+    "forwardPorts": [8501],
+    "postStartCommand": "pip install pipenv && pipenv install --dev && pipenv run streamlit run app.py",
+    "settings": {
+      "terminal.integrated.defaultProfile.linux": "bash"
+    }
+  }
+  
