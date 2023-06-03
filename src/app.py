@@ -4,6 +4,7 @@ from datetime import datetime
 import plotly.graph_objects as go
 import streamlit as st
 from streamlit_option_menu import option_menu
+import src.database as db
 
 # ---------SETTINGS--------------
 incomes = ["Salary", "Blog", "Other Income"]
@@ -72,9 +73,7 @@ if selected == "Data Entry":
             )
             incomes = {income: st.session_state[income] for income in incomes}
             expenses = {expense: st.session_state[expense] for expense in expenses}
-            # TODO Insert values into database
-            st.write(f"incomes: {incomes}")
-            st.write(f"expenses: {expenses}")
+            db.insert_period(period, incomes, expenses, comment)
             st.success("Data Saved!")
 
 
