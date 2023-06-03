@@ -31,6 +31,7 @@ selected = option_menu(
 years = [datetime.today().year, datetime.today().year + 1]
 months = list(calendar.month_name[1:])
 
+
 # --- HIDE STREAMLIT STYLE ---
 hide_st_style = """
                 <style>
@@ -81,21 +82,13 @@ if selected == "Data Entry":
 if selected == "Data Visualization":
     st.header("Data Visualization")
     with st.form("saved_periods"):
-        # TODO: Get periods from database
-        period = st.selectbox("Select Period:", ["2022_March"])
+        period = st.selectbox("Select Period:", db.get_all_periods())
         submitted = st.form_submit_button("Plot Period")
         if submitted:
-            # TODO: Get Data from database
-            comment = "Some comment"
-            incomes = {"Salary": 1500, "Blog": 50, "Other Income": 10}
-            expenses = {
-                "Rent": 600,
-                "Utilities": 200,
-                "Groceries": 300,
-                "Car": 100,
-                "Other Expenses": 50,
-                "Saving": 10,
-            }
+            period_data = db.get_period(period)
+            comment = period_data.get("comment")
+            incomes = period_data.get("incomes")
+            expenses = period_data.get("expenses")
 
             # Create metrics
             total_income = sum(incomes.values())
@@ -107,7 +100,6 @@ if selected == "Data Visualization":
             col3.metric("Remaining Budget", f"{remaining_budget} {currency}")
             st.text(f"Comment: {comment}")
 
-            # --- SANKEY CHART ---
             # Create sankey chart
             label = list(incomes.keys()) + ["Total Income"] + list(expenses.keys())
             source = list(range(len(incomes))) + [len(incomes)] * len(expenses)
