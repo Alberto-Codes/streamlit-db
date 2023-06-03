@@ -6,6 +6,7 @@ name = "pypi"
 [packages]
 streamlit = "*"
 plotly = "*"
+streamlit-option-menu = "*"
 
 [dev-packages]
 black = "*"
