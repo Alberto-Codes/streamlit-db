@@ -7,11 +7,12 @@ name = "pypi"
 streamlit = "*"
 plotly = "*"
 streamlit-option-menu = "*"
+google-cloud-firestore = "*"
 
 [dev-packages]
 black = "*"
 isort = "*"
-google-cloud-firestore = "*"
+
 
 [requires]
 python_version = "3.10"
