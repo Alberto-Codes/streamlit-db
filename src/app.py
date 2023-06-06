@@ -1,10 +1,17 @@
 import calendar
+import uuid
 from datetime import datetime
 
 import plotly.graph_objects as go
 import streamlit as st
 from streamlit_option_menu import option_menu
+
 import database as db
+
+# Check if the user_id already exists in the session state.
+if "user_id" not in st.session_state:
+    # Generate a unique identifier for the user.
+    st.session_state.user_id = str(uuid.uuid4())
 
 # ---------SETTINGS--------------
 incomes = ["Salary", "Blog", "Other Income"]
@@ -74,7 +81,9 @@ if selected == "Data Entry":
             )
             incomes = {income: st.session_state[income] for income in incomes}
             expenses = {expense: st.session_state[expense] for expense in expenses}
-            db.insert_period(period, incomes, expenses, comment)
+            db.insert_period(
+                st.session_state.user_id, period, incomes, expenses, comment
+            )
             st.success("Data Saved!")
 
 
@@ -82,10 +91,12 @@ if selected == "Data Entry":
 if selected == "Data Visualization":
     st.header("Data Visualization")
     with st.form("saved_periods"):
-        period = st.selectbox("Select Period:", db.get_all_periods())
+        period = st.selectbox(
+            "Select Period:", db.get_all_periods(st.session_state.user_id)
+        )
         submitted = st.form_submit_button("Plot Period")
         if submitted:
-            period_data = db.get_period(period)
+            period_data = db.get_period(st.session_state.user_id, period)
             comment = period_data.get("comment")
             incomes = period_data.get("incomes")
             expenses = period_data.get("expenses")
