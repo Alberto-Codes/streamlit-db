@@ -4,7 +4,7 @@ import os
 from google.cloud import firestore
 from google.oauth2 import service_account
 
-credentials=None
+credentials = None
 
 if os.environ.get("GOOGLE_APPLICATION_CREDENTIALS"):
     # Obtain the service account key from the environment variable
@@ -21,12 +21,13 @@ if os.environ.get("GOOGLE_APPLICATION_CREDENTIALS"):
 # Initialize Firestore with the project ID and credentials
 db = firestore.Client(credentials=credentials)
 
-# Get a reference to the Firestore collection
-collection_ref = db.collection("monthly_reports")
+# # Get a reference to the Firestore collection
+# collection_ref = db.collection("monthly_reports")
 
 
-def insert_period(period, incomes, expenses, comment):
+def insert_period(user_id, period, incomes, expenses, comment):
     """Returns the report on a successful creation, otherwise raises an error"""
+    collection_ref = db.collection(f"user_data_{user_id}")
     doc_ref = collection_ref.document(period)
     doc_ref.set({"incomes": incomes, "expenses": expenses, "comment": comment})
     return doc_ref.get().to_dict()
@@ -36,23 +37,26 @@ def insert_period(period, incomes, expenses, comment):
 #     """Returns a list of all periods"""
 #     docs = collection_ref.stream()
 #     return [doc.to_dict() for doc in docs]
-def fetch_all_periods():
+def fetch_all_periods(user_id):
     """Returns a list of all periods"""
+    collection_ref = db.collection(f"user_data_{user_id}")
     docs = collection_ref.stream()
     return [{"key": doc.id, **doc.to_dict()} for doc in docs]
 
 
-def get_period(period):
+def get_period(user_id, period):
     """If not found, the function will return None"""
+    collection_ref = db.collection(f"user_data_{user_id}")
     doc_ref = collection_ref.document(period)
     doc = doc_ref.get()
     if doc.exists:
         return doc.to_dict()
     else:
         return None
-    
+
+
 # --- DATABASE INTERFACE ---
-def get_all_periods():
-    items = fetch_all_periods()
+def get_all_periods(user_id):
+    items = fetch_all_periods(user_id)
     periods = [item["key"] for item in items]
     return periods
